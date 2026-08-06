@@ -1,55 +1,148 @@
 const Speech = {
 
+    voices: [],
+
     russianVoice: null,
     englishVoice: null,
 
     init() {
 
-        const voices = speechSynthesis.getVoices();
+        this.voices = speechSynthesis.getVoices();
 
-        this.russianVoice =
-            voices.find(v => v.lang.startsWith("ru"));
-
-        this.englishVoice =
-            voices.find(v => v.lang.startsWith("en"));
+        this.selectVoices();
 
     },
 
-    sayRussian(text) {
 
-        speechSynthesis.cancel();
 
-        const u = new SpeechSynthesisUtterance(text);
+    selectVoices() {
 
-        u.lang = "ru-RU";
+        this.russianVoice = this.findVoice(
+            ["Milena", "Yuri"],
+            "ru"
+        );
 
-        if (this.russianVoice)
-            u.voice = this.russianVoice;
-
-        u.rate = 0.95;
-
-        speechSynthesis.speak(u);
+        this.englishVoice = this.findVoice(
+            ["Samantha", "Daniel", "Ava", "Karen", "Alex"],
+            "en"
+        );
 
     },
 
-    sayEnglish(text) {
+
+
+    findVoice(preferredNames, language) {
+
+        for (const name of preferredNames) {
+
+            const voice = this.voices.find(v => v.name === name);
+
+            if (voice) {
+
+                return voice;
+
+            }
+
+        }
+
+        return this.voices.find(v =>
+
+            v.lang.toLowerCase().startsWith(language)
+
+        ) || null;
+
+    },
+
+
+
+    async sayRussian(text) {
+
+        return this.say(
+
+            text,
+
+            this.russianVoice,
+
+            "ru-RU"
+
+        );
+
+    },
+
+
+
+    async sayEnglish(text) {
+
+        return this.say(
+
+            text,
+
+            this.englishVoice,
+
+            "en-US"
+
+        );
+
+    },
+
+
+
+    say(text, voice, lang) {
+
+        return new Promise(resolve => {
+
+            speechSynthesis.cancel();
+
+            const utterance =
+                new SpeechSynthesisUtterance(text);
+
+            utterance.lang = lang;
+
+            utterance.rate = Settings.speechRate;
+
+            if (voice) {
+
+                utterance.voice = voice;
+
+            }
+
+            utterance.onend = () => {
+
+                resolve();
+
+            };
+
+            utterance.onerror = () => {
+
+                resolve();
+
+            };
+
+            speechSynthesis.speak(utterance);
+
+        });
+
+    },
+
+
+
+    stop() {
 
         speechSynthesis.cancel();
 
-        const u = new SpeechSynthesisUtterance(text);
+    },
 
-        u.lang = "en-US";
 
-        if (this.englishVoice)
-            u.voice = this.englishVoice;
 
-        u.rate = 0.9;
+    setRate(rate) {
 
-        speechSynthesis.speak(u);
+        this.rate = rate;
 
     }
 
 };
+
+
 
 speechSynthesis.onvoiceschanged = () => {
 
