@@ -14,12 +14,12 @@ const AI = {
         const lesson = [
 
             {
-                russian: "Я раньше жил в деревне.",
+                russian: "Я раньше жила в деревне.",
                 english: "I used to live in a village."
             },
 
             {
-                russian: "Я привык вставать рано.",
+                russian: "Я привыкла вставать рано.",
                 english: "I'm used to getting up early."
             },
 
