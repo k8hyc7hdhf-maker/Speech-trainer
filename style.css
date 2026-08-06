@@ -29,6 +29,22 @@ h1 {
 
 }
 
+.version {
+
+    text-align: center;
+
+    font-size: 28px;
+
+    color: #58A6FF;
+
+    font-weight: bold;
+
+    margin-top: -10px;
+
+    margin-bottom: 12px;
+
+}
+
 .subtitle {
 
     text-align: center;
