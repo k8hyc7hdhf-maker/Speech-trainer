@@ -30,24 +30,10 @@ const App = {
         // );
         // ==========================================
 
-        const lesson = [
-
-            {
-                russian: "Я раньше жил в деревне.",
-                english: "I used to live in a village."
-            },
-
-            {
-                russian: "Я привык вставать рано.",
-                english: "I'm used to getting up early."
-            },
-
-            {
-                russian: "Не откладывай это.",
-                english: "Don't put it off."
-            }
-
-        ];
+        const lesson = await AI.generate(
+    topic,
+    sentenceCount
+);
 
         Lesson.load(lesson);
 
