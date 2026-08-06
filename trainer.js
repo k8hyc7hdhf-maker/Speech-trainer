@@ -8,14 +8,20 @@ const Trainer = {
 
     async start() {
 
-        if (this.playing) return;
+        if (this.playing) {
+            this.stop();
+        }
 
-        if (Lesson.count() === 0) return;
+        if (Lesson.count() === 0) {
+            return;
+        }
 
         this.playing = true;
         this.paused = false;
 
         Lesson.restart();
+
+        this.updatePauseButton();
 
         while (this.playing) {
 
@@ -60,29 +66,52 @@ const Trainer = {
 
         Speech.stop();
 
-    },
+        this.clearScreen();
 
-    pause() {
+        document.getElementById("playerScreen")
+            .classList.add("hidden");
 
-        this.paused = true;
+        document.getElementById("playerScreen")
+            .classList.remove("active");
 
-    },
+        document.getElementById("setupScreen")
+            .classList.remove("hidden");
 
-    resume() {
-
-        this.paused = false;
-
-    },
-
-    next() {
-
-        Lesson.next();
+        this.updatePauseButton();
 
     },
 
-    repeat() {
+    togglePause() {
 
-        // Реализуем позже
+        this.paused = !this.paused;
+
+        this.updatePauseButton();
+
+    },
+
+    updatePauseButton() {
+
+        const button = document.getElementById("pauseBtn");
+
+        if (!button) return;
+
+        button.textContent = this.paused
+            ? "▶ Resume"
+            : "⏸ Pause";
+
+    },
+
+    previous() {
+
+        Speech.stop();
+
+        Lesson.previous();
+
+        const sentence = Lesson.current();
+
+        this.showRussian(sentence);
+
+        Speech.sayRussian(sentence.russian);
 
     },
 
@@ -132,3 +161,28 @@ const Trainer = {
     }
 
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    document.getElementById("prevBtn")
+        .addEventListener("click", () => {
+
+            Trainer.previous();
+
+        });
+
+    document.getElementById("pauseBtn")
+        .addEventListener("click", () => {
+
+            Trainer.togglePause();
+
+        });
+
+    document.getElementById("stopBtn")
+        .addEventListener("click", () => {
+
+            Trainer.stop();
+
+        });
+
+});
