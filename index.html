@@ -1,40 +1,52 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Speech Trainer</title>
+<meta charset="UTF-8">
 
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Speech Trainer</title>
+
+<link rel="manifest" href="manifest.json">
+
+<link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
 
 <div id="setupScreen">
 
-    <h1>Speech Trainer</h1>
+<h1>Speech Trainer</h1>
 
-    <label>Что хотите изучить?</label>
-    
+<label>Что хотите изучить?</label>
 
-    <textarea id="topic" placeholder="Например:
+<textarea id="topic" placeholder="Например:
 
 used to
 be used to
 get used to"></textarea>
 
-    <label>Количество предложений</label>
+<label>Количество предложений</label>
 
-    <input id="count" type="number" value="20" min="5" max="100">
+<input id="count"
+type="number"
+value="20">
 
-    <label>Пауза перед английским (сек.)</label>
+<label>Пауза перед английским (сек.)</label>
 
-    <input id="delay" type="number" value="5" min="2" max="15">
+<input id="delay"
+type="number"
+value="5">
 
-    <button id="createBtn">
-        Создать тренировку
-    </button>
+<button id="createBtn">
+
+Создать тренировку
+
+</button>
 
 </div>
 
@@ -42,29 +54,26 @@ get used to"></textarea>
 
 <div id="playerScreen" class="hidden">
 
-    <div id="ruText">
-        Русское предложение
-    </div>
+<div id="ruText"></div>
 
-    <div id="enText">
-        English sentence
-    </div>
+<div id="enText"></div>
 
-    <div id="controls">
+<div id="controls">
 
-        <button id="pauseBtn">⏸</button>
+<button id="pauseBtn">⏸</button>
 
-        <button id="repeatBtn">🔁</button>
+<button id="repeatBtn">🔁</button>
 
-        <button id="nextBtn">⏭</button>
+<button id="nextBtn">⏭</button>
 
-        <button id="stopBtn">⏹</button>
+<button id="stopBtn">⏹</button>
 
-    </div>
+</div>
 
 </div>
 
 <script src="app.js"></script>
 
 </body>
+
 </html>
