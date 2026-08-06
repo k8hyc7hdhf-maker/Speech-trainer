@@ -1,29 +1,51 @@
-const lesson = [
-    {
-        ru: "Я раньше жил в деревне.",
-        en: "I used to live in a village."
-    },
-    {
-        ru: "Я привык вставать рано.",
-        en: "I'm used to getting up early."
-    },
-    {
-        ru: "Не откладывай это на завтра.",
-        en: "Don't put it off until tomorrow."
+const App = {
+
+    async createTraining() {
+
+        // Временно используем тестовый урок.
+        // Позже здесь будет:
+        // const lesson = await AI.generate(...);
+
+        const lesson = [
+
+            {
+                russian: "Я раньше жил в деревне.",
+                english: "I used to live in a village."
+            },
+
+            {
+                russian: "Я привык вставать рано.",
+                english: "I'm used to getting up early."
+            },
+
+            {
+                russian: "Не откладывай это.",
+                english: "Don't put it off."
+            }
+
+        ];
+
+        Lesson.load(lesson);
+
+        document.getElementById("setupScreen").classList.add("hidden");
+        document.getElementById("playerScreen").classList.remove("hidden");
+
+        Trainer.start();
+
     }
-];
-
-const setupScreen = document.getElementById("setupScreen");
-const playerScreen = document.getElementById("playerScreen");
-const createBtn = document.getElementById("createBtn");
-
-createBtn.onclick = () => {
-
-    setupScreen.classList.add("hidden");
-
-    playerScreen.classList.remove("hidden");
-    playerScreen.classList.add("active");
-
-    Player.start(lesson);
 
 };
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    document
+        .getElementById("createBtn")
+        .addEventListener("click", () => {
+
+            App.createTraining();
+
+        });
+
+});
