@@ -1,0 +1,153 @@
+body{
+
+    margin:0;
+    background:#111;
+    color:white;
+
+    font-family:Arial,sans-serif;
+
+}
+
+.hidden{
+
+    display:none;
+
+}
+
+#setupScreen{
+
+    padding:20px;
+
+}
+
+h1{
+
+    text-align:center;
+    margin-bottom:40px;
+
+}
+
+label{
+
+    display:block;
+    margin-top:20px;
+    margin-bottom:8px;
+
+}
+
+textarea{
+
+    width:100%;
+    height:180px;
+
+    font-size:20px;
+
+    background:#222;
+    color:white;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:12px;
+
+    box-sizing:border-box;
+
+}
+
+input{
+
+    width:100%;
+
+    font-size:22px;
+
+    padding:12px;
+
+    background:#222;
+    color:white;
+
+    border:none;
+
+    border-radius:12px;
+
+    box-sizing:border-box;
+
+}
+
+button{
+
+    width:100%;
+
+    margin-top:25px;
+
+    padding:18px;
+
+    font-size:22px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#0A84FF;
+
+    color:white;
+
+}
+
+#playerScreen{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    height:100vh;
+
+    padding:25px;
+
+    box-sizing:border-box;
+
+}
+
+#ruText{
+
+    margin-top:80px;
+
+    text-align:center;
+
+    font-size:42px;
+
+    font-weight:bold;
+
+}
+
+#enText{
+
+    text-align:center;
+
+    font-size:38px;
+
+    color:#88C0FF;
+
+    min-height:120px;
+
+}
+
+#controls{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-bottom:30px;
+
+}
+
+#controls button{
+
+    flex:1;
+
+    font-size:32px;
+
+}
