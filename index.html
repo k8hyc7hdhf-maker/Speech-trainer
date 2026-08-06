@@ -1,5 +1,69 @@
-Speech Trainer
-Что хотите изучить? Количество предложений Пауза перед английским (сек.) Создать тренировку
-Русское предложение
-English sentence
-⏸ 🔁 ⏭ ⏹
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Speech Trainer</title>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="setupScreen">
+
+    <h1>Speech Trainer</h1>
+
+    <label>Что хотите изучить?</label>
+
+    <textarea id="topic" placeholder="Например:
+
+used to
+be used to
+get used to"></textarea>
+
+    <label>Количество предложений</label>
+
+    <input id="count" type="number" value="20" min="5" max="100">
+
+    <label>Пауза перед английским (сек.)</label>
+
+    <input id="delay" type="number" value="5" min="2" max="15">
+
+    <button id="createBtn">
+        Создать тренировку
+    </button>
+
+</div>
+
+
+
+<div id="playerScreen" class="hidden">
+
+    <div id="ruText">
+        Русское предложение
+    </div>
+
+    <div id="enText">
+        English sentence
+    </div>
+
+    <div id="controls">
+
+        <button id="pauseBtn">⏸</button>
+
+        <button id="repeatBtn">🔁</button>
+
+        <button id="nextBtn">⏭</button>
+
+        <button id="stopBtn">⏹</button>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>
