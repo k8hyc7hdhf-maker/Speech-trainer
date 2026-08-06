@@ -1,185 +1,193 @@
-body{
+body {
 
-margin:0;
-
-background:#111;
-
-color:white;
-
-font-family:Arial,sans-serif;
+    margin: 0;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
 
 }
 
-.hidden{
+.hidden {
 
-display:none!important;
-
-}
-
-#setupScreen{
-
-padding:20px;
+    display: none !important;
 
 }
 
-h1{
+#setupScreen {
 
-text-align:center;
-
-font-size:64px;
-
-margin:60px 0;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
 
 }
 
-label{
+h1 {
 
-display:block;
-
-font-size:22px;
-
-margin:20px 0 10px;
+    text-align: center;
+    font-size: 56px;
+    margin: 40px 0 10px;
 
 }
 
-textarea{
+.subtitle {
 
-width:100%;
-
-height:180px;
-
-box-sizing:border-box;
-
-padding:20px;
-
-font-size:22px;
-
-border:none;
-
-border-radius:20px;
-
-background:#252525;
-
-color:white;
+    text-align: center;
+    color: #AAAAAA;
+    font-size: 22px;
+    margin-bottom: 40px;
 
 }
 
-input{
+label {
 
-width:100%;
-
-box-sizing:border-box;
-
-padding:18px;
-
-font-size:24px;
-
-border:none;
-
-border-radius:20px;
-
-background:#252525;
-
-color:white;
+    display: block;
+    font-size: 22px;
+    margin: 20px 0 10px;
 
 }
 
-button{
+textarea {
 
-width:100%;
+    width: 100%;
+    height: 180px;
 
-margin-top:25px;
+    box-sizing: border-box;
 
-padding:20px;
+    padding: 20px;
 
-font-size:22px;
+    font-size: 22px;
 
-border:none;
+    border: none;
+    border-radius: 20px;
 
-border-radius:20px;
+    background: #252525;
+    color: white;
 
-background:#0A84FF;
-
-color:white;
-
-}
-
-
-
-#playerScreen{
-
-height:100vh;
-
-padding:25px;
-
-box-sizing:border-box;
+    resize: vertical;
 
 }
 
+input {
 
+    width: 100%;
 
-#playerScreen.active{
+    box-sizing: border-box;
 
-display:flex;
+    padding: 18px;
 
-flex-direction:column;
+    font-size: 24px;
 
-justify-content:space-between;
+    border: none;
+    border-radius: 20px;
 
-}
-
-
-
-#ruText{
-
-margin-top:80px;
-
-font-size:56px;
-
-font-weight:bold;
-
-text-align:center;
-
-line-height:1.3;
+    background: #252525;
+    color: white;
 
 }
 
+button {
 
+    width: 100%;
 
-#enText{
+    margin-top: 25px;
 
-font-size:42px;
+    padding: 20px;
 
-text-align:center;
+    font-size: 22px;
 
-line-height:1.3;
+    border: none;
+    border-radius: 20px;
 
-color:#87CEFA;
+    background: #0A84FF;
 
-visibility:hidden;
+    color: white;
 
-min-height:140px;
-
-}
-
-
-
-#controls{
-
-display:flex;
-
-gap:10px;
-
-margin-bottom:20px;
+    cursor: pointer;
 
 }
 
+button:active {
 
+    transform: scale(0.98);
 
-#controls button{
+}
 
-flex:1;
+#createBtn {
 
-font-size:34px;
+    margin-top: 40px;
+    font-size: 28px;
+    font-weight: bold;
+
+}
+
+#playerScreen {
+
+    height: 100vh;
+
+    padding: 25px;
+
+    box-sizing: border-box;
+
+}
+
+#playerScreen.active {
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+}
+
+#ruText {
+
+    margin-top: 80px;
+
+    font-size: 60px;
+
+    font-weight: bold;
+
+    text-align: center;
+
+    line-height: 1.3;
+
+}
+
+#enText {
+
+    font-size: 46px;
+
+    text-align: center;
+
+    line-height: 1.35;
+
+    color: #58A6FF;
+
+    visibility: hidden;
+
+    min-height: 150px;
+
+}
+
+#controls {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+
+}
+
+#controls button {
+
+    flex: 1;
+
+    height: 70px;
+
+    margin-top: 0;
+
+    font-size: 22px;
 
 }

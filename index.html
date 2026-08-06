@@ -5,8 +5,7 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Speech Trainer</title>
 
@@ -20,11 +19,45 @@
 
     <div id="setupScreen">
 
-        <h1>Speech Trainer</h1>
+        <h1>🎙 Speech Trainer</h1>
+
+        <p class="subtitle">
+            Practice speaking, not typing.
+        </p>
+
+        <label for="topicInput">
+            What do you want to study today?
+        </label>
 
         <textarea
             id="topicInput"
-            placeholder="What do you want to study today?"></textarea>
+            placeholder="Example:
+used to
+be used to
+get used to
+put off"></textarea>
+
+        <label for="countInput">
+            Number of sentences
+        </label>
+
+        <input
+            id="countInput"
+            type="number"
+            min="5"
+            max="100"
+            value="20">
+
+        <label for="pauseInput">
+            Pause after Russian (seconds)
+        </label>
+
+        <input
+            id="pauseInput"
+            type="number"
+            min="1"
+            max="15"
+            value="5">
 
         <button id="createBtn">
             Create Training
@@ -40,18 +73,30 @@
 
         <div id="enText"></div>
 
+        <div id="controls">
+
+            <button id="prevBtn">
+                ⏮ Previous
+            </button>
+
+            <button id="pauseBtn">
+                ⏸ Pause
+            </button>
+
+            <button id="stopBtn">
+                ⏹ Stop
+            </button>
+
+        </div>
+
     </div>
 
 
 
     <script src="settings.js"></script>
-
     <script src="lesson.js"></script>
-
     <script src="speech.js"></script>
-
     <script src="trainer.js"></script>
-
     <script src="app.js"></script>
 
 </body>
