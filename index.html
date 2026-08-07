@@ -27,12 +27,14 @@ document.write(`<link rel="stylesheet" href="style.css?v=${VERSION}">`);
 
 <h1>🎙 Speech Trainer</h1>
 
-<p class="version">
-    Version 0.2
-</p>
+<p class="version" id="version"></p>
+
+<script>
+document.getElementById("version").textContent = `Version ${VERSION}`;
+</script>
 
 <p class="subtitle">
-    Practice speaking, not typing.
+    Practice speaking, not typing..
 </p>
 
         <label for="topicInput">
