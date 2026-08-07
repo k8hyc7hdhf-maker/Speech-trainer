@@ -2,13 +2,15 @@ const AI = {
 
     // ==========================================
     // DEVELOPMENT MODE
+    // USE_TEST_DATA
     // true  = тестовые данные
     // false = OpenAI API
     // ==========================================
 
-    DEV_MODE: true,
+    USE_TEST_DATA: true,
 
     MODEL: "gpt-5.5",
+TEMPERATURE: 0.8,
 
     async generate(topic, count) {
 
@@ -16,10 +18,10 @@ const AI = {
         console.log("Speech Trainer AI");
         console.log("Topic:", topic);
         console.log("Sentences:", count);
-        console.log("DEV MODE:", this.DEV_MODE);
+        console.log("DEV MODE:", this.USE_TEST_DATA);
         console.log("================================");
 
-        if (this.DEV_MODE) {
+        if (this.USE_TEST_DATA) {
 
             return this.generateTestLesson(count);
 
@@ -99,6 +101,16 @@ const AI = {
 
     async generateOpenAI(topic, count) {
 
+const apiKey = localStorage.getItem("openaiApiKey");
+
+if (!apiKey) {
+
+    throw new Error(
+        "Please enter your OpenAI API Key."
+    );
+
+}
+
         const prompt = this.buildPrompt(topic, count);
 
         const response = await fetch(
@@ -111,8 +123,8 @@ const AI = {
 
                     "Content-Type": "application/json",
 
-                    "Authorization":
-                        `Bearer ${CONFIG.apiKey}`
+                   "Authorization":
+    `Bearer ${apiKey}`
 
                 },
 
@@ -129,7 +141,7 @@ const AI = {
 
                     ],
 
-                    temperature: 0.8
+              temperature: this.TEMPERATURE
 
                 })
 
