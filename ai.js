@@ -165,7 +165,7 @@ alert("generateOpenAI()");
 
     return this.generateTestLesson(count);
 
-}
+},
 
     //------------------------------------------------
     // PROMPT

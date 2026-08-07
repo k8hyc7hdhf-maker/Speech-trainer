@@ -1,6 +1,8 @@
 const App = {
 
     async createTraining() {
+    
+    alert("createTraining()");
 
         const topic = document
             .getElementById("topicInput")
