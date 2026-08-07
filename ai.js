@@ -7,7 +7,7 @@ const AI = {
     // false = OpenAI API
     // ==========================================
 
-    USE_TEST_DATA: true,
+    USE_TEST_DATA: false,
 
     MODEL: "gpt-5.5",
 TEMPERATURE: 0.8,
@@ -101,70 +101,66 @@ TEMPERATURE: 0.8,
 
     async generateOpenAI(topic, count) {
 
-const apiKey = localStorage.getItem("openaiApiKey");
+    const apiKey = localStorage.getItem("openaiApiKey");
 
-if (!apiKey) {
+    if (!apiKey) {
 
-    throw new Error(
-        "Please enter your OpenAI API Key."
-    );
-
-}
-
-        const prompt = this.buildPrompt(topic, count);
-
-        const response = await fetch(
-            "https://api.openai.com/v1/chat/completions",
-            {
-
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type": "application/json",
-
-                   "Authorization":
-    `Bearer ${apiKey}`
-
-                },
-
-                body: JSON.stringify({
-
-                    model: this.MODEL,
-
-                    messages: [
-
-                        {
-                            role: "user",
-                            content: prompt
-                        }
-
-                    ],
-
-              temperature: this.TEMPERATURE
-
-                })
-
-            }
-
+        throw new Error(
+            "Please enter your OpenAI API Key."
         );
 
-        if (!response.ok) {
+    }
 
-            throw new Error(
-                "HTTP " + response.status
-            );
+    const response = await fetch(
+
+        "https://api.openai.com/v1/chat/completions",
+
+        {
+
+            method: "POST",
+
+            headers: {
+
+                "Content-Type": "application/json",
+
+                "Authorization": `Bearer ${apiKey}`
+
+            },
+
+            body: JSON.stringify({
+
+                model: this.MODEL,
+
+                messages: [
+
+                    {
+                        role: "user",
+                        content: "Say only: Hello!"
+                    }
+
+                ]
+
+            })
 
         }
 
-        const data = await response.json();
+    );
 
-        const text =
-            data.choices[0].message.content;
+    if (!response.ok) {
 
-        return JSON.parse(text);
+        const error = await response.text();
 
-    },
+        throw new Error(error);
+
+    }
+
+    const data = await response.json();
+
+    alert(data.choices[0].message.content);
+
+    return this.generateTestLesson(count);
+
+}
 
     //------------------------------------------------
     // PROMPT
