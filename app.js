@@ -17,19 +17,19 @@ const App = {
             10
         ) || 5;
 
-        // Сохраняем настройки
-
         Settings.russianPause = pauseSeconds * 1000;
 
-        // Пока просто читаем API Key.
-        // На следующем шаге будем сохранять его в localStorage.
+        // API Key
 
         const apiKey = document
             .getElementById("apiKeyInput")
             .value
             .trim();
 
-        console.log("API Key:", apiKey);
+        localStorage.setItem(
+            "openaiApiKey",
+            apiKey
+        );
 
         const lesson = await AI.generate(
 
@@ -59,7 +59,12 @@ const App = {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // Кнопка Create Training
+    // Загружаем API Key
+
+    document.getElementById("apiKeyInput").value =
+        localStorage.getItem("openaiApiKey") || "";
+
+    // Create Training
 
     document
         .getElementById("createBtn")
