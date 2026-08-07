@@ -18,22 +18,26 @@ const App = {
         ) || 5;
 
         // Сохраняем настройки
+
         Settings.russianPause = pauseSeconds * 1000;
 
-        // ==========================================
-        // ВРЕМЕННО
-        // Здесь позже будет:
-        //
-        // const lesson = await AI.generate(
-        //     topic,
-        //     sentenceCount
-        // );
-        // ==========================================
+        // Пока просто читаем API Key.
+        // На следующем шаге будем сохранять его в localStorage.
+
+        const apiKey = document
+            .getElementById("apiKeyInput")
+            .value
+            .trim();
+
+        console.log("API Key:", apiKey);
 
         const lesson = await AI.generate(
-    topic,
-    sentenceCount
-);
+
+            topic,
+
+            sentenceCount
+
+        );
 
         Lesson.load(lesson);
 
@@ -55,6 +59,8 @@ const App = {
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    // Кнопка Create Training
+
     document
         .getElementById("createBtn")
         .addEventListener("click", () => {
@@ -62,5 +68,29 @@ document.addEventListener("DOMContentLoaded", () => {
             App.createTraining();
 
         });
+
+    // Показать / скрыть API Key
+
+    const input =
+        document.getElementById("apiKeyInput");
+
+    const button =
+        document.getElementById("toggleApiKey");
+
+    button.addEventListener("click", () => {
+
+        if (input.type === "password") {
+
+            input.type = "text";
+            button.textContent = "🙈";
+
+        } else {
+
+            input.type = "password";
+            button.textContent = "👁️";
+
+        }
+
+    });
 
 });

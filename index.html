@@ -34,7 +34,7 @@ document.getElementById("version").textContent = `Version ${VERSION}`;
 </script>
 
 <p class="subtitle">
-    Practice speaking, not typing..
+    Practice speaking, not typing.
 </p>
 
         <label for="topicInput">
@@ -70,6 +70,25 @@ put off"></textarea>
             min="1"
             max="15"
             value="5">
+            
+ <label for="apiKeyInput">
+    OpenAI API Key
+</label>
+
+<div class="passwordBox">
+
+    <input
+        id="apiKeyInput"
+        type="password"
+        placeholder="sk-proj-...">
+
+    <button
+        type="button"
+        id="toggleApiKey">
+        👁️
+    </button>
+
+</div>
 
         <button id="createBtn">
             Create Training
@@ -105,7 +124,7 @@ put off"></textarea>
 
 
 
-   <script>
+ <script>
 document.write(`
 <script src="settings.js?v=${VERSION}"><\/script>
 <script src="lesson.js?v=${VERSION}"><\/script>

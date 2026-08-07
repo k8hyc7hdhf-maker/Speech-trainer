@@ -207,3 +207,31 @@ button:active {
     font-size: 22px;
 
 }
+
+.passwordBox{
+
+    display:flex;
+
+    gap:10px;
+
+    align-items:center;
+
+}
+
+.passwordBox input{
+
+    flex:1;
+
+}
+
+.passwordBox button{
+
+    width:70px;
+
+    margin-top:0;
+
+    font-size:28px;
+
+    padding:18px;
+
+}
