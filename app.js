@@ -30,6 +30,11 @@ const App = {
             "openaiApiKey",
             apiKey
         );
+        
+        console.log(
+    "Saved:",
+    localStorage.getItem("openaiApiKey")
+);
 
         const lesson = await AI.generate(
 
@@ -61,8 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Загружаем API Key
 
-    document.getElementById("apiKeyInput").value =
-        localStorage.getItem("openaiApiKey") || "";
+    const savedKey =
+    localStorage.getItem("openaiApiKey");
+
+console.log("Loaded:", savedKey);
+
+document.getElementById("apiKeyInput").value =
+    savedKey || "";
 
     // Create Training
 
