@@ -14,6 +14,7 @@ TEMPERATURE: 0.8,
 
     async generate(topic, count) {
 
+        alert("AI.generate()");
         console.log("================================");
         console.log("Speech Trainer AI");
         console.log("Topic:", topic);
@@ -28,6 +29,8 @@ TEMPERATURE: 0.8,
         }
 
         try {
+
+alert("Calling OpenAI...");
 
             return await this.generateOpenAI(topic, count);
 
@@ -100,6 +103,8 @@ TEMPERATURE: 0.8,
     //------------------------------------------------
 
     async generateOpenAI(topic, count) {
+
+alert("generateOpenAI()");
 
     const apiKey = localStorage.getItem("openaiApiKey");
 
