@@ -8,8 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Speech Trainer</title>
+    
+    <script>
+const VERSION = "0.2.1";
+</script>
 
-    <link rel="stylesheet" href="style.css">
+    <script>
+document.write(`<link rel="stylesheet" href="style.css?v=${VERSION}">`);
+</script>
 
     <link rel="manifest" href="manifest.json">
 
@@ -26,7 +32,7 @@
 </p>
 
 <p class="subtitle">
-    Practice speaking, not typing. test
+    Practice speaking, not typing.
 </p>
 
         <label for="topicInput">
@@ -97,14 +103,17 @@ put off"></textarea>
 
 
 
-   <script src="settings.js"></script> 
-<script src="lesson.js"></script>
-<script src="speech.js"></script>
+   <script>
+document.write(`
+<script src="settings.js?v=${VERSION}"><\/script>
+<script src="lesson.js?v=${VERSION}"><\/script>
+<script src="speech.js?v=${VERSION}"><\/script>
+<script src="ai.js?v=${VERSION}"><\/script>
+<script src="trainer.js?v=${VERSION}"><\/script>
+<script src="app.js?v=${VERSION}"><\/script>
+`);
+</script>
 
-<script src="ai.js"></script>
-
-<script src="trainer.js"></script>
-<script src="app.js"></script>
 
 </body>
 
