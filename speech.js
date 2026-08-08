@@ -5,37 +5,95 @@ const Speech = {
     russianVoice: null,
     englishVoice: null,
 
+
+    // ==========================================
+    // INIT
+    // ==========================================
+
     init() {
 
-        this.voices = speechSynthesis.getVoices();
+        this.voices =
+            speechSynthesis.getVoices();
 
         this.selectVoices();
 
+        console.log(
+            "Speech voices:",
+            this.voices.length
+        );
+
+        console.log(
+            "Russian voice:",
+            this.russianVoice
+                ? this.russianVoice.name
+                : "not found"
+        );
+
+        console.log(
+            "English voice:",
+            this.englishVoice
+                ? this.englishVoice.name
+                : "not found"
+        );
+
     },
 
 
+    // ==========================================
+    // SELECT VOICES
+    // ==========================================
 
     selectVoices() {
 
-        this.russianVoice = this.findVoice(
-            ["Milena", "Yuri"],
-            "ru"
-        );
+        this.russianVoice =
+            this.findVoice(
+                [
+                    "Milena",
+                    "Yuri"
+                ],
+                "ru"
+            );
 
-        this.englishVoice = this.findVoice(
-            ["Samantha", "Daniel", "Ava", "Karen", "Alex"],
-            "en"
-        );
+
+        this.englishVoice =
+            this.findVoice(
+                [
+                    "Samantha",
+                    "Daniel",
+                    "Ava",
+                    "Karen",
+                    "Alex"
+                ],
+                "en"
+            );
 
     },
 
 
+    // ==========================================
+    // FIND VOICE
+    // ==========================================
 
-    findVoice(preferredNames, language) {
+    findVoice(
+        preferredNames,
+        language
+    ) {
 
-        for (const name of preferredNames) {
+        // First try preferred voices
 
-            const voice = this.voices.find(v => v.name === name);
+        for (
+            const name of preferredNames
+        ) {
+
+            const voice =
+                this.voices.find(
+                    v =>
+                        v.name
+                            .toLowerCase()
+                            .includes(
+                                name.toLowerCase()
+                            )
+                );
 
             if (voice) {
 
@@ -45,60 +103,154 @@ const Speech = {
 
         }
 
-        return this.voices.find(v =>
 
-            v.lang.toLowerCase().startsWith(language)
+        // Otherwise use any voice
+        // with the requested language
 
+        return this.voices.find(
+            v =>
+                v.lang
+                    .toLowerCase()
+                    .startsWith(language)
         ) || null;
 
     },
 
 
+    // ==========================================
+    // RUSSIAN
+    // ==========================================
 
     async sayRussian(text) {
 
         return this.say(
-
             text,
-
             this.russianVoice,
-
             "ru-RU"
-
         );
 
     },
 
 
+    // ==========================================
+    // ENGLISH
+    // ==========================================
 
     async sayEnglish(text) {
 
         return this.say(
-
             text,
-
             this.englishVoice,
-
             "en-US"
-
         );
 
     },
 
 
+    // ==========================================
+    // SAY
+    // ==========================================
 
-    say(text, voice, lang) {
+    say(
+        text,
+        voice,
+        lang
+    ) {
 
         return new Promise(resolve => {
 
-            speechSynthesis.cancel();
+            let finished = false;
+
+            let timeout = null;
+
+
+            // ----------------------------------
+            // Finish safely
+            // ----------------------------------
+
+            const finish = () => {
+
+                if (finished) {
+                    return;
+                }
+
+                finished = true;
+
+                if (timeout) {
+                    clearTimeout(timeout);
+                }
+
+                resolve();
+
+            };
+
+
+            // ----------------------------------
+            // Validate text
+            // ----------------------------------
+
+            if (
+                typeof text !== "string" ||
+                text.trim() === ""
+            ) {
+
+                console.warn(
+                    "Speech: empty text"
+                );
+
+                finish();
+
+                return;
+
+            }
+
+
+            console.log(
+                "Speech:",
+                lang,
+                text
+            );
+
+
+            // ----------------------------------
+            // Stop previous speech
+            // ----------------------------------
+
+            try {
+
+                speechSynthesis.cancel();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Speech cancel error:",
+                    error
+                );
+
+            }
+
+
+            // ----------------------------------
+            // Create utterance
+            // ----------------------------------
 
             const utterance =
-                new SpeechSynthesisUtterance(text);
+                new SpeechSynthesisUtterance(
+                    text
+                );
+
 
             utterance.lang = lang;
 
-            utterance.rate = Settings.speechRate;
+
+            utterance.rate =
+                Settings.speechRate || 1;
+
+
+            utterance.pitch = 1;
+
 
             if (voice) {
 
@@ -106,48 +258,196 @@ const Speech = {
 
             }
 
+
+            // ----------------------------------
+            // START
+            // ----------------------------------
+
+            utterance.onstart = () => {
+
+                console.log(
+                    "Speech started:",
+                    text
+                );
+
+            };
+
+
+            // ----------------------------------
+            // END
+            // ----------------------------------
+
             utterance.onend = () => {
 
-                resolve();
+                console.log(
+                    "Speech ended:",
+                    text
+                );
+
+                finish();
 
             };
 
-            utterance.onerror = () => {
 
-                resolve();
+            // ----------------------------------
+            // ERROR
+            // ----------------------------------
+
+            utterance.onerror = error => {
+
+                console.error(
+                    "Speech error:",
+                    error
+                );
+
+                finish();
 
             };
 
-            speechSynthesis.speak(utterance);
+
+            // ----------------------------------
+            // SAFETY TIMEOUT
+            //
+            // Safari/iPhone sometimes fails
+            // to fire onend.
+            // ----------------------------------
+
+            const estimatedTime =
+                Math.max(
+                    5000,
+                    text.length * 150
+                );
+
+
+            timeout = setTimeout(() => {
+
+                if (finished) {
+                    return;
+                }
+
+
+                console.warn(
+                    "Speech timeout. Continuing..."
+                );
+
+
+                try {
+
+                    speechSynthesis.cancel();
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Speech cancel error:",
+                        error
+                    );
+
+                }
+
+
+                finish();
+
+            }, estimatedTime);
+
+
+            // ----------------------------------
+            // START SPEAKING
+            // ----------------------------------
+
+            setTimeout(() => {
+
+                if (finished) {
+                    return;
+                }
+
+
+                try {
+
+                    speechSynthesis.speak(
+                        utterance
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "Speech speak() error:",
+                        error
+                    );
+
+                    finish();
+
+                }
+
+            }, 100);
 
         });
 
     },
 
 
+    // ==========================================
+    // STOP
+    // ==========================================
 
     stop() {
 
-        speechSynthesis.cancel();
+        console.log(
+            "Speech.stop()"
+        );
+
+
+        try {
+
+            speechSynthesis.cancel();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Speech stop error:",
+                error
+            );
+
+        }
 
     },
 
 
+    // ==========================================
+    // RATE
+    // ==========================================
 
     setRate(rate) {
 
-        this.rate = rate;
+        Settings.speechRate = rate;
 
     }
 
 };
 
 
+// ==============================================
+// VOICES CHANGED
+// ==============================================
 
 speechSynthesis.onvoiceschanged = () => {
+
+    console.log(
+        "voiceschanged"
+    );
 
     Speech.init();
 
 };
+
+
+// ==============================================
+// INITIALIZE
+// ==============================================
 
 Speech.init();
