@@ -250,17 +250,26 @@ const AI = {
         // Worker error
         // ------------------------------------------
 
-      if (!response.ok) {
+    if (!response.ok) {
 
     console.error(
         "Worker error:",
         data
     );
 
+    const details =
+        data.details
+            ? JSON.stringify(
+                data.details,
+                null,
+                2
+            )
+            : "";
+
     throw new Error(
-        data.error ||
-        data.details?.error?.message ||
-        JSON.stringify(data)
+        (data.error || "Worker error") +
+        "\n\n" +
+        details
     );
 
 }
