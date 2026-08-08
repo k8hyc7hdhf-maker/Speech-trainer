@@ -5,7 +5,7 @@ const App = {
         alert("Create training()");
 
 
-        // ==========================================
+        //  ==========================================
         // UNLOCK SPEECH IMMEDIATELY
         //
         // This must happen before any await.

@@ -1,7 +1,7 @@
 const AI = {
 
     // ==========================================
-    // MODE
+    // MODE 
     //
     // true  = тестовые данные
     // false = Cloudflare Worker → OpenAI
