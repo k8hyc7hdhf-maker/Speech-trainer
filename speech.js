@@ -5,6 +5,8 @@ const Speech = {
     russianVoice: null,
     englishVoice: null,
 
+    unlocked: false,
+
 
     // ==========================================
     // INIT
@@ -47,13 +49,9 @@ const Speech = {
 
         this.russianVoice =
             this.findVoice(
-                [
-                    "Milena",
-                    "Yuri"
-                ],
+                ["Milena", "Yuri"],
                 "ru"
             );
-
 
         this.englishVoice =
             this.findVoice(
@@ -79,8 +77,6 @@ const Speech = {
         language
     ) {
 
-        // First try preferred voices
-
         for (
             const name of preferredNames
         ) {
@@ -96,16 +92,10 @@ const Speech = {
                 );
 
             if (voice) {
-
                 return voice;
-
             }
 
         }
-
-
-        // Otherwise use any voice
-        // with the requested language
 
         return this.voices.find(
             v =>
@@ -113,6 +103,53 @@ const Speech = {
                     .toLowerCase()
                     .startsWith(language)
         ) || null;
+
+    },
+
+
+    // ==========================================
+    // UNLOCK
+    //
+    // Called directly from Create Training
+    // ==========================================
+
+    unlock() {
+
+        console.log(
+            "Speech unlock"
+        );
+
+        try {
+
+            speechSynthesis.cancel();
+
+            const utterance =
+                new SpeechSynthesisUtterance("");
+
+            utterance.volume = 0;
+
+            utterance.lang = "en-US";
+
+            speechSynthesis.speak(
+                utterance
+            );
+
+            this.unlocked = true;
+
+            console.log(
+                "Speech unlocked"
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Speech unlock error:",
+                error
+            );
+
+        }
 
     },
 
@@ -164,10 +201,6 @@ const Speech = {
             let timeout = null;
 
 
-            // ----------------------------------
-            // Finish safely
-            // ----------------------------------
-
             const finish = () => {
 
                 if (finished) {
@@ -185,18 +218,10 @@ const Speech = {
             };
 
 
-            // ----------------------------------
-            // Validate text
-            // ----------------------------------
-
             if (
                 typeof text !== "string" ||
                 text.trim() === ""
             ) {
-
-                console.warn(
-                    "Speech: empty text"
-                );
 
                 finish();
 
@@ -211,10 +236,6 @@ const Speech = {
                 text
             );
 
-
-            // ----------------------------------
-            // Stop previous speech
-            // ----------------------------------
 
             try {
 
@@ -232,10 +253,6 @@ const Speech = {
             }
 
 
-            // ----------------------------------
-            // Create utterance
-            // ----------------------------------
-
             const utterance =
                 new SpeechSynthesisUtterance(
                     text
@@ -244,10 +261,8 @@ const Speech = {
 
             utterance.lang = lang;
 
-
             utterance.rate =
                 Settings.speechRate || 1;
-
 
             utterance.pitch = 1;
 
@@ -259,10 +274,6 @@ const Speech = {
             }
 
 
-            // ----------------------------------
-            // START
-            // ----------------------------------
-
             utterance.onstart = () => {
 
                 console.log(
@@ -273,25 +284,16 @@ const Speech = {
             };
 
 
-            // ----------------------------------
-            // END
-            // ----------------------------------
-
             utterance.onend = () => {
 
                 console.log(
-                    "Speech ended:",
-                    text
+                    "Speech ended"
                 );
 
                 finish();
 
             };
 
-
-            // ----------------------------------
-            // ERROR
-            // ----------------------------------
 
             utterance.onerror = error => {
 
@@ -305,31 +307,13 @@ const Speech = {
             };
 
 
-            // ----------------------------------
-            // SAFETY TIMEOUT
-            //
-            // Safari/iPhone sometimes fails
-            // to fire onend.
-            // ----------------------------------
-
-            const estimatedTime =
-                Math.max(
-                    5000,
-                    text.length * 150
-                );
-
+            // Safety timeout
 
             timeout = setTimeout(() => {
 
-                if (finished) {
-                    return;
-                }
-
-
                 console.warn(
-                    "Speech timeout. Continuing..."
+                    "Speech timeout"
                 );
-
 
                 try {
 
@@ -337,52 +321,34 @@ const Speech = {
 
                 }
 
-                catch (error) {
-
-                    console.error(
-                        "Speech cancel error:",
-                        error
-                    );
-
-                }
-
+                catch (error) {}
 
                 finish();
 
-            }, estimatedTime);
+            }, Math.max(
+                6000,
+                text.length * 180
+            ));
 
 
-            // ----------------------------------
-            // START SPEAKING
-            // ----------------------------------
+            try {
 
-            setTimeout(() => {
+                speechSynthesis.speak(
+                    utterance
+                );
 
-                if (finished) {
-                    return;
-                }
+            }
 
+            catch (error) {
 
-                try {
+                console.error(
+                    "Speech speak error:",
+                    error
+                );
 
-                    speechSynthesis.speak(
-                        utterance
-                    );
+                finish();
 
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "Speech speak() error:",
-                        error
-                    );
-
-                    finish();
-
-                }
-
-            }, 100);
+            }
 
         });
 
@@ -394,11 +360,6 @@ const Speech = {
     // ==========================================
 
     stop() {
-
-        console.log(
-            "Speech.stop()"
-        );
-
 
         try {
 
@@ -431,61 +392,19 @@ const Speech = {
 };
 
 
-// ==============================================
+// ==========================================
 // VOICES CHANGED
-// ==============================================
+// ==========================================
 
 speechSynthesis.onvoiceschanged = () => {
-
-    console.log(
-        "voiceschanged"
-    );
 
     Speech.init();
 
 };
 
 
-// ==============================================
+// ==========================================
 // INITIALIZE
-// ==============================================
+// ==========================================
 
 Speech.init();
-
-setTimeout(() => {
-
-    console.log("=== SPEECH TEST ===");
-
-    const test =
-        new SpeechSynthesisUtterance(
-            "Приветик. Это тест."
-        );
-
-    test.lang = "ru-RU";
-    test.rate = 1;
-
-    test.onstart = () => {
-        console.log("TEST: START");
-    };
-
-    test.onend = () => {
-        console.log("TEST: END");
-    };
-
-    test.onerror = error => {
-        console.log("TEST: ERROR", error);
-    };
-
-    console.log(
-        "TEST voices:",
-        speechSynthesis.getVoices()
-    );
-
-    console.log(
-        "TEST speaking before:",
-        speechSynthesis.speaking
-    );
-
-    speechSynthesis.speak(test);
-
-}, 2000);

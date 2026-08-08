@@ -2,63 +2,146 @@ const App = {
 
     async createTraining() {
 
-        alert("createTraining()");
+        alert("Create training()");
 
-        const topic = document
-            .getElementById("topicInput")
-            .value
-            .trim();
 
-        const sentenceCount = parseInt(
-            document.getElementById("countInput").value,
-            10
-        ) || 20;
+        // ==========================================
+        // UNLOCK SPEECH IMMEDIATELY
+        //
+        // This must happen before any await.
+        // Important for iPhone.
+        // ==========================================
 
-        const pauseSeconds = parseInt(
-            document.getElementById("pauseInput").value,
-            10
-        ) || 5;
+        Speech.unlock();
 
-        // Сохраняем паузу
+
+        // ==========================================
+        // TOPIC
+        // ==========================================
+
+        const topic =
+            document
+                .getElementById("topicInput")
+                .value
+                .trim();
+
+
+        // ==========================================
+        // SENTENCE COUNT
+        // ==========================================
+
+        const sentenceCount =
+            parseInt(
+                document
+                    .getElementById("countInput")
+                    .value,
+                10
+            ) || 20;
+
+
+        // ==========================================
+        // PAUSE
+        // ==========================================
+
+        const pauseSeconds =
+            parseInt(
+                document
+                    .getElementById("pauseInput")
+                    .value,
+                10
+            ) || 5;
+
+
         Settings.russianPause =
             pauseSeconds * 1000;
 
-        console.log("================================");
-        console.log("Creating training");
-        console.log("Topic:", topic);
-        console.log("Sentences:", sentenceCount);
-        console.log("Pause:", pauseSeconds);
-        console.log("================================");
+
+        // ==========================================
+        // GENERATE LESSON
+        // ==========================================
 
         try {
 
-            const lesson = await AI.generate(
-                topic,
-                sentenceCount
+            console.log(
+                "Starting AI generation..."
             );
 
-            Lesson.load(lesson);
+
+            const lesson =
+                await AI.generate(
+                    topic,
+                    sentenceCount
+                );
+
+
+            console.log(
+                "Lesson received:",
+                lesson
+            );
+
+
+            if (
+                !Array.isArray(lesson) ||
+                lesson.length === 0
+            ) {
+
+                throw new Error(
+                    "AI returned an empty lesson."
+                );
+
+            }
+
+
+            // ======================================
+            // LOAD LESSON
+            // ======================================
+
+            Lesson.load(
+                lesson
+            );
+
+
+            // ======================================
+            // SHOW PLAYER
+            // ======================================
 
             document
                 .getElementById("setupScreen")
                 .classList.add("hidden");
 
-            const playerScreen =
-                document.getElementById("playerScreen");
 
-            playerScreen.classList.remove("hidden");
-            playerScreen.classList.add("active");
+            const playerScreen =
+                document.getElementById(
+                    "playerScreen"
+                );
+
+
+            playerScreen.classList.remove(
+                "hidden"
+            );
+
+
+            playerScreen.classList.add(
+                "active"
+            );
+
+
+            // ======================================
+            // START TRAINER
+            // ======================================
 
             Trainer.start();
 
         }
 
+
         catch (error) {
 
             console.error(
-                "Training error:",
+                "Could not create training:",
                 error
             );
+
 
             alert(
                 "Could not create training.\n\n" +
@@ -72,13 +155,18 @@ const App = {
 };
 
 
+// ==========================================
+// DOM READY
+// ==========================================
+
 document.addEventListener(
     "DOMContentLoaded",
     () => {
 
-        // ------------------------------------------
-        // Create Training
-        // ------------------------------------------
+
+        // ======================================
+        // CREATE TRAINING
+        // ======================================
 
         document
             .getElementById("createBtn")
@@ -90,6 +178,7 @@ document.addEventListener(
 
                 }
             );
+
 
     }
 );
