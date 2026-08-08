@@ -33,7 +33,8 @@ const Trainer = {
 
             this.showRussian(sentence);
 
-            await Speech.sayRussian(sentence.russian);
+            //await Speech.sayRussian(sentence.russian);
+            await Speech.sayRussian("Привет. Это тест.");
 
             await this.wait(Settings.russianPause);
 
