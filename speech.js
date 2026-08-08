@@ -451,3 +451,41 @@ speechSynthesis.onvoiceschanged = () => {
 // ==============================================
 
 Speech.init();
+
+setTimeout(() => {
+
+    console.log("=== SPEECH TEST ===");
+
+    const test =
+        new SpeechSynthesisUtterance(
+            "Приветик. Это тест."
+        );
+
+    test.lang = "ru-RU";
+    test.rate = 1;
+
+    test.onstart = () => {
+        console.log("TEST: START");
+    };
+
+    test.onend = () => {
+        console.log("TEST: END");
+    };
+
+    test.onerror = error => {
+        console.log("TEST: ERROR", error);
+    };
+
+    console.log(
+        "TEST voices:",
+        speechSynthesis.getVoices()
+    );
+
+    console.log(
+        "TEST speaking before:",
+        speechSynthesis.speaking
+    );
+
+    speechSynthesis.speak(test);
+
+}, 2000);
