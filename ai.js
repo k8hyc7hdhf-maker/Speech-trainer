@@ -250,18 +250,20 @@ const AI = {
         // Worker error
         // ------------------------------------------
 
-        if (!response.ok) {
+      if (!response.ok) {
 
-            throw new Error(
+    console.error(
+        "Worker error:",
+        data
+    );
 
-                data.error ||
+    throw new Error(
+        data.error ||
+        data.details?.error?.message ||
+        JSON.stringify(data)
+    );
 
-                "Cloudflare Worker error."
-
-            );
-
-        }
-
+}
 
         // ------------------------------------------
         // Get AI text
