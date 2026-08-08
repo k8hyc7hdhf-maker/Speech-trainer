@@ -5,19 +5,23 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Speech Trainer</title>
-    
-    <script>
-const VERSION = "0.2.12";
-</script>
 
     <script>
-document.write(`<link rel="stylesheet" href="style.css?v=${VERSION}">`);
-</script>
+        const VERSION = "0.2.13";
+    </script>
 
-    <link rel="manifest" href="manifest.json">
+    <script>
+        document.write(
+            `<link rel="stylesheet" href="style.css?v=${VERSION}">`
+        );
+    </script>
+
+    <link rel="manifest"
+          href="manifest.json">
 
 </head>
 
@@ -25,17 +29,19 @@ document.write(`<link rel="stylesheet" href="style.css?v=${VERSION}">`);
 
     <div id="setupScreen">
 
-<h1>🎙 Speech Trainer</h1>
+        <h1>🎙 Speech Trainer</h1>
 
-<p class="version" id="version"></p>
+        <p class="version" id="version"></p>
 
-<script>
-document.getElementById("version").textContent = `Version ${VERSION}`;
-</script>
+        <script>
+            document.getElementById("version").textContent =
+                `Version ${VERSION}`;
+        </script>
 
-<p class="subtitle">
-    Practice speaking, not typing.
-</p>
+        <p class="subtitle">
+            Practice speaking, not typing.
+        </p>
+
 
         <label for="topicInput">
             What do you want to study today?
@@ -49,6 +55,7 @@ be used to
 get used to
 put off"></textarea>
 
+
         <label for="countInput">
             Number of sentences
         </label>
@@ -60,6 +67,7 @@ put off"></textarea>
             max="100"
             value="20">
 
+
         <label for="pauseInput">
             Pause after Russian (seconds)
         </label>
@@ -70,32 +78,13 @@ put off"></textarea>
             min="1"
             max="15"
             value="5">
-            
- <label for="apiKeyInput">
-    OpenAI API Key
-</label>
 
-<div class="passwordBox">
-
-    <input
-        id="apiKeyInput"
-        type="password"
-        placeholder="sk-proj-...">
-
-    <button
-        type="button"
-        id="toggleApiKey">
-        👁️
-    </button>
-
-</div>
 
         <button id="createBtn">
             Create Training
         </button>
 
     </div>
-
 
 
     <div id="playerScreen" class="hidden">
@@ -123,17 +112,16 @@ put off"></textarea>
     </div>
 
 
-
- <script>
-document.write(`
-<script src="settings.js?v=${VERSION}"><\/script>
-<script src="lesson.js?v=${VERSION}"><\/script>
-<script src="speech.js?v=${VERSION}"><\/script>
-<script src="ai.js?v=${VERSION}"><\/script>
-<script src="trainer.js?v=${VERSION}"><\/script>
-<script src="app.js?v=${VERSION}"><\/script>
-`);
-</script>
+    <script>
+        document.write(`
+            <script src="settings.js?v=${VERSION}"><\/script>
+            <script src="lesson.js?v=${VERSION}"><\/script>
+            <script src="speech.js?v=${VERSION}"><\/script>
+            <script src="ai.js?v=${VERSION}"><\/script>
+            <script src="trainer.js?v=${VERSION}"><\/script>
+            <script src="app.js?v=${VERSION}"><\/script>
+        `);
+    </script>
 
 
 </body>

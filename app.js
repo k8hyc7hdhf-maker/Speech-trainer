@@ -1,8 +1,8 @@
 const App = {
 
     async createTraining() {
-    
-    alert("createTraining()");
+
+        alert("createTraining()");
 
         const topic = document
             .getElementById("topicInput")
@@ -19,95 +19,77 @@ const App = {
             10
         ) || 5;
 
-        Settings.russianPause = pauseSeconds * 1000;
+        // Сохраняем паузу
+        Settings.russianPause =
+            pauseSeconds * 1000;
 
-        // API Key
+        console.log("================================");
+        console.log("Creating training");
+        console.log("Topic:", topic);
+        console.log("Sentences:", sentenceCount);
+        console.log("Pause:", pauseSeconds);
+        console.log("================================");
 
-        const apiKey = document
-            .getElementById("apiKeyInput")
-            .value
-            .trim();
+        try {
 
-        localStorage.setItem(
-            "openaiApiKey",
-            apiKey
-        );
-        
-        console.log(
-    "Saved:",
-    localStorage.getItem("openaiApiKey")
-);
+            const lesson = await AI.generate(
+                topic,
+                sentenceCount
+            );
 
-        const lesson = await AI.generate(
+            Lesson.load(lesson);
 
-            topic,
+            document
+                .getElementById("setupScreen")
+                .classList.add("hidden");
 
-            sentenceCount
+            const playerScreen =
+                document.getElementById("playerScreen");
 
-        );
+            playerScreen.classList.remove("hidden");
+            playerScreen.classList.add("active");
 
-        Lesson.load(lesson);
+            Trainer.start();
 
-        document
-            .getElementById("setupScreen")
-            .classList.add("hidden");
+        }
 
-        const playerScreen =
-            document.getElementById("playerScreen");
+        catch (error) {
 
-        playerScreen.classList.remove("hidden");
-        playerScreen.classList.add("active");
+            console.error(
+                "Training error:",
+                error
+            );
 
-        Trainer.start();
+            alert(
+                "Could not create training.\n\n" +
+                error.message
+            );
+
+        }
 
     }
 
 };
 
-document.addEventListener("DOMContentLoaded", () => {
 
-    // Загружаем API Key
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    const savedKey =
-    localStorage.getItem("openaiApiKey");
+        // ------------------------------------------
+        // Create Training
+        // ------------------------------------------
 
-console.log("Loaded:", savedKey);
+        document
+            .getElementById("createBtn")
+            .addEventListener(
+                "click",
+                () => {
 
-document.getElementById("apiKeyInput").value =
-    savedKey || "";
+                    App.createTraining();
 
-    // Create Training
+                }
+            );
 
-    document
-        .getElementById("createBtn")
-        .addEventListener("click", () => {
-
-            App.createTraining();
-
-        });
-
-    // Показать / скрыть API Key
-
-    const input =
-        document.getElementById("apiKeyInput");
-
-    const button =
-        document.getElementById("toggleApiKey");
-
-    button.addEventListener("click", () => {
-
-        if (input.type === "password") {
-
-            input.type = "text";
-            button.textContent = "🙈";
-
-        } else {
-
-            input.type = "password";
-            button.textContent = "👁️";
-
-        }
-
-    });
-
-});
+    }
+);
