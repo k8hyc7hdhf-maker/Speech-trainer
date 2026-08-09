@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
 
     <meta charset="UTF-8">
@@ -43,6 +43,10 @@
         </p>
 
 
+        <!-- ==========================================
+             TOPIC
+             ========================================== -->
+
         <label for="topicInput">
             What do you want to study today?
         </label>
@@ -56,6 +60,10 @@ get used to
 put off"></textarea>
 
 
+        <!-- ==========================================
+             SENTENCE COUNT
+             ========================================== -->
+
         <label for="countInput">
             Number of sentences
         </label>
@@ -67,6 +75,10 @@ put off"></textarea>
             max="100"
             value="20">
 
+
+        <!-- ==========================================
+             RUSSIAN PAUSE
+             ========================================== -->
 
         <label for="pauseInput">
             Pause after Russian (seconds)
@@ -80,12 +92,72 @@ put off"></textarea>
             value="5">
 
 
+        <!-- ==========================================
+             VOICE SETTINGS
+             ========================================== -->
+
+        <div id="voiceSettings">
+
+            <h2>🔊 Voice Settings</h2>
+
+
+            <!-- RUSSIAN -->
+
+            <label for="russianVoiceSelect">
+                Russian voice
+            </label>
+
+            <select id="russianVoiceSelect">
+
+                <option value="">
+                    System default
+                </option>
+
+            </select>
+
+
+            <!-- ENGLISH -->
+
+            <label for="englishVoiceSelect">
+                English voice
+            </label>
+
+            <select id="englishVoiceSelect">
+
+                <option value="">
+                    System default
+                </option>
+
+            </select>
+
+
+            <!-- REFRESH -->
+
+            <button
+                id="refreshVoicesBtn"
+                type="button">
+
+                🔄 Refresh voices
+
+            </button>
+
+        </div>
+
+
+        <!-- ==========================================
+             CREATE
+             ========================================== -->
+
         <button id="createBtn">
             Create Training
         </button>
 
     </div>
 
+
+    <!-- ==========================================
+         PLAYER
+         ========================================== -->
 
     <div id="playerScreen" class="hidden">
 
@@ -111,6 +183,10 @@ put off"></textarea>
 
     </div>
 
+
+    <!-- ==========================================
+         JAVASCRIPT
+         ========================================== -->
 
     <script>
         document.write(`
