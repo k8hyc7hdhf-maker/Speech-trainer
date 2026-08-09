@@ -1,13 +1,250 @@
 const App = {
 
+    // ==========================================
+    // LOADING UI
+    // ==========================================
+
+    showLoading() {
+
+        let loading =
+            document.getElementById("aiLoading");
+
+        if (!loading) {
+
+            loading =
+                document.createElement("div");
+
+            loading.id = "aiLoading";
+
+            loading.innerHTML = `
+                <div class="aiLoadingBox">
+
+                    <div class="aiLoadingTitle">
+                        Creating training
+                    </div>
+
+                    <div class="aiLoadingDots">
+                        <span>●</span>
+                        <span>●</span>
+                        <span>●</span>
+                    </div>
+
+                    <div class="aiLoadingText">
+                        Please wait...
+                    </div>
+
+                </div>
+            `;
+
+            document.body.appendChild(
+                loading
+            );
+
+
+            // ==================================
+            // LOADING STYLES
+            // ==================================
+
+            const style =
+                document.createElement("style");
+
+            style.id = "aiLoadingStyle";
+
+            style.textContent = `
+
+                #aiLoading {
+
+                    position: fixed;
+
+                    inset: 0;
+
+                    z-index: 9999;
+
+                    display: flex;
+
+                    align-items: center;
+
+                    justify-content: center;
+
+                    background: rgba(0, 0, 0, 0.88);
+
+                    color: white;
+
+                }
+
+
+                .aiLoadingBox {
+
+                    text-align: center;
+
+                    padding: 35px 30px;
+
+                    border-radius: 24px;
+
+                    background: #252525;
+
+                    min-width: 260px;
+
+                }
+
+
+                .aiLoadingTitle {
+
+                    font-size: 28px;
+
+                    font-weight: bold;
+
+                    margin-bottom: 25px;
+
+                }
+
+
+                .aiLoadingDots {
+
+                    font-size: 24px;
+
+                    letter-spacing: 8px;
+
+                    color: #58A6FF;
+
+                    margin-bottom: 20px;
+
+                }
+
+
+                .aiLoadingDots span {
+
+                    display: inline-block;
+
+                    animation: aiDot 1.4s infinite;
+
+                }
+
+
+                .aiLoadingDots span:nth-child(2) {
+
+                    animation-delay: 0.2s;
+
+                }
+
+
+                .aiLoadingDots span:nth-child(3) {
+
+                    animation-delay: 0.4s;
+
+                }
+
+
+                .aiLoadingText {
+
+                    font-size: 20px;
+
+                    color: #AAAAAA;
+
+                }
+
+
+                @keyframes aiDot {
+
+                    0%,
+                    60%,
+                    100% {
+
+                        opacity: 0.25;
+
+                        transform: translateY(0);
+
+                    }
+
+                    30% {
+
+                        opacity: 1;
+
+                        transform: translateY(-6px);
+
+                    }
+
+                }
+
+            `;
+
+            document.head.appendChild(
+                style
+            );
+
+        }
+
+
+        loading.classList.remove(
+            "hidden"
+        );
+
+    },
+
+
+    hideLoading() {
+
+        const loading =
+            document.getElementById(
+                "aiLoading"
+            );
+
+        if (!loading) return;
+
+        loading.classList.add(
+            "hidden"
+        );
+
+    },
+
+
+    // ==========================================
+    // CREATE TRAINING
+    // ==========================================
+
     async createTraining() {
 
-        alert("Create training()");
+        const createButton =
+            document.getElementById(
+                "createBtn"
+            );
 
 
-        //  ==========================================
+        // ======================================
+        // PREVENT DOUBLE CLICK
+        // ======================================
+
+        if (
+            createButton &&
+            createButton.disabled
+        ) {
+
+            return;
+
+        }
+
+
+        if (createButton) {
+
+            createButton.disabled = true;
+
+            createButton.dataset.originalText =
+                createButton.textContent;
+
+        }
+
+
+        // ==========================================
+        // SHOW LOADING
+        // ==========================================
+
+        this.showLoading();
+
+
+        // ==========================================
         // UNLOCK SPEECH IMMEDIATELY
         //
+        // IMPORTANT:
         // This must happen before any await.
         // Important for iPhone.
         // ==========================================
@@ -102,7 +339,7 @@ const App = {
 
 
             // ======================================
-            // SHOW PLAYER
+            // HIDE SETUP
             // ======================================
 
             document
@@ -143,10 +380,54 @@ const App = {
             );
 
 
+            // ======================================
+            // REAL ERROR
+            //
+            // We KEEP this alert.
+            //
+            // This is important for errors such as:
+            //
+            // unsupported_country_region_territory
+            // OpenAI API error
+            // network errors
+            // etc.
+            // ======================================
+
             alert(
                 "Could not create training.\n\n" +
                 error.message
             );
+
+        }
+
+
+        finally {
+
+            // ======================================
+            // HIDE LOADING
+            // ======================================
+
+            this.hideLoading();
+
+
+            // ======================================
+            // ENABLE BUTTON AGAIN
+            // ======================================
+
+            if (createButton) {
+
+                createButton.disabled = false;
+
+                if (
+                    createButton.dataset.originalText
+                ) {
+
+                    createButton.textContent =
+                        createButton.dataset.originalText;
+
+                }
+
+            }
 
         }
 
@@ -163,7 +444,6 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
 
-
         // ======================================
         // CREATE TRAINING
         // ======================================
@@ -178,7 +458,6 @@ document.addEventListener(
 
                 }
             );
-
 
     }
 );

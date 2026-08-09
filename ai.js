@@ -31,8 +31,6 @@ const AI = {
 
     async generate(topic, count) {
 
-        alert("AI.generate()");
-
         console.log("================================");
         console.log("Speech Trainer AI");
         console.log("Topic:", topic);
@@ -63,10 +61,6 @@ const AI = {
         // ------------------------------------------
 
         try {
-
-            alert(
-                "Calling Cloudflare Worker..."
-            );
 
             return await this.generateOpenAI(
                 topic,
@@ -184,10 +178,6 @@ const AI = {
         topic,
         count
     ) {
-
-        alert(
-            "generateOpenAI()"
-        );
 
 
         const prompt =
