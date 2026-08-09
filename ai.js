@@ -240,29 +240,30 @@ const AI = {
         // Worker error
         // ------------------------------------------
 
-    if (!response.ok) {
+        if (!response.ok) {
 
-    console.error(
-        "Worker error:",
-        data
-    );
+            console.error(
+                "Worker error:",
+                data
+            );
 
-    const details =
-        data.details
-            ? JSON.stringify(
-                data.details,
-                null,
-                2
-            )
-            : "";
+            const details =
+                data.details
+                    ? JSON.stringify(
+                        data.details,
+                        null,
+                        2
+                    )
+                    : "";
 
-    throw new Error(
-        (data.error || "Worker error") +
-        "\n\n" +
-        details
-    );
+            throw new Error(
+                (data.error || "Worker error") +
+                "\n\n" +
+                details
+            );
 
-}
+        }
+
 
         // ------------------------------------------
         // Get AI text
@@ -315,6 +316,7 @@ const AI = {
 
 
         // Remove markdown code fences
+
         cleanText =
             cleanText
                 .replace(
@@ -427,22 +429,129 @@ const AI = {
 
 Create ${count} English learning sentences.
 
-The student wants to practice this topic:
+The student wants to practice the following
+English target expressions:
 
 ${topic}
 
-Requirements:
 
-1. Create exactly ${count} sentences.
-2. The Russian sentence should be a natural translation/prompt.
-3. The English sentence should sound natural in everyday conversational English.
-4. Focus specifically on the requested topic.
-5. Use different situations and vocabulary.
-6. Keep sentences suitable for English speaking practice.
+IMPORTANT RULES ABOUT TARGET EXPRESSIONS:
 
-Return ONLY valid JSON.
+1. Treat EACH LINE of the user's input as ONE complete target expression.
 
-Format:
+2. NEVER split a multi-word expression into separate words.
+
+3. For example:
+   "put off" is ONE expression.
+   "used to" is ONE expression.
+   "get used to" is ONE expression.
+   "be used to" is ONE expression.
+
+4. Keep every multi-word expression exactly as a complete phrase.
+
+5. Do NOT treat individual words inside a phrasal verb,
+   idiom, or multi-word expression as separate targets.
+
+
+SENTENCE DISTRIBUTION:
+
+6. Randomly distribute the target expressions throughout
+   the lesson.
+
+7. DO NOT follow the order in which the expressions
+   were provided by the student.
+
+8. Each sentence should normally focus on ONE target
+   expression.
+
+9. Do NOT force several target expressions into the same
+   sentence unless doing so sounds completely natural
+   in everyday English.
+
+10. Make sure the target expressions are distributed
+    across the whole lesson.
+
+11. If there are fewer target expressions than sentences,
+    some expressions may be used more than once.
+
+12. Do not make consecutive sentences use the same
+    target expression unless necessary.
+
+
+ENGLISH STYLE:
+
+13. English must sound natural and conversational,
+    like everyday speech between native speakers.
+
+14. Avoid formal, academic, literary, or textbook-style
+    English.
+
+15. Use different everyday situations and vocabulary.
+
+16. Use natural conversational contractions when appropriate,
+    such as "I'm", "don't", "I've", "can't", "we're", etc.
+
+17. Use a natural mixture of common conversational tenses
+    when appropriate, including:
+    - present simple
+    - present continuous
+    - past simple
+    - past continuous
+    - present perfect
+    - present perfect continuous when natural
+    - future with "will"
+    - "be going to"
+
+18. Do NOT deliberately force different tenses into every
+    sentence. Use the tense that sounds natural for the
+    situation.
+
+19. Include different types of sentences naturally:
+    - statements
+    - questions
+    - negative sentences
+    - exclamations
+    - conversational/emotional phrases
+
+20. Use natural conversational emphasis when appropriate,
+    for example:
+    "I really wanted to go."
+    "Did you actually do that?"
+    "I just can't believe it!"
+
+21. Avoid repetitive sentence structures.
+
+22. Keep the sentences useful for speaking practice.
+
+23. Keep the difficulty around A2-B1 unless the target
+    expressions require slightly more advanced English.
+
+
+RUSSIAN:
+
+24. The Russian sentence should be a natural Russian
+    translation/prompt for the English sentence.
+
+25. The Russian should sound natural, not like a literal
+    machine translation.
+
+
+OUTPUT:
+
+26. Create exactly ${count} sentences.
+
+27. Return ONLY valid JSON.
+
+28. No markdown.
+
+29. No explanations.
+
+30. No comments.
+
+31. No text outside the JSON.
+
+
+Required format:
 
 [
   {
@@ -450,11 +559,6 @@ Format:
     "english": "..."
   }
 ]
-
-No markdown.
-No explanations.
-No comments.
-No text outside the JSON.
 
 `;
 
