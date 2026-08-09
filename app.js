@@ -1,6 +1,15 @@
 const App = {
 
     // ==========================================
+    // LAST GENERATED LESSON
+    // ==========================================
+
+    lastLesson: null,
+    lastTopic: null,
+    lastCount: null,
+
+
+    // ==========================================
     // LOADING UI
     // ==========================================
 
@@ -235,13 +244,6 @@ const App = {
 
 
         // ==========================================
-        // SHOW LOADING
-        // ==========================================
-
-        this.showLoading();
-
-
-        // ==========================================
         // UNLOCK SPEECH IMMEDIATELY
         //
         // IMPORTANT:
@@ -294,8 +296,112 @@ const App = {
 
 
         // ==========================================
+        // REPEAT LAST LESSON
+        //
+        // If topic and sentence count are exactly
+        // the same as the previous request,
+        // use the existing lesson.
+        //
+        // No AI request.
+        // ==========================================
+
+        const sameRequest =
+            this.lastLesson &&
+            this.lastTopic === topic &&
+            this.lastCount === sentenceCount;
+
+
+        if (sameRequest) {
+
+            console.log(
+                "Repeating previous lesson. No AI request."
+            );
+
+
+            // Make a fresh copy so Trainer/Lesson
+            // cannot accidentally modify our
+            // saved lesson.
+
+            const lesson =
+                this.lastLesson.map(
+                    sentence => ({
+                        russian:
+                            sentence.russian,
+
+                        english:
+                            sentence.english
+                    })
+                );
+
+
+            Lesson.load(
+                lesson
+            );
+
+
+            // ======================================
+            // SHOW PLAYER
+            // ======================================
+
+            document
+                .getElementById("setupScreen")
+                .classList.add("hidden");
+
+
+            const playerScreen =
+                document.getElementById(
+                    "playerScreen"
+                );
+
+
+            playerScreen.classList.remove(
+                "hidden"
+            );
+
+
+            playerScreen.classList.add(
+                "active"
+            );
+
+
+            // ======================================
+            // START TRAINER
+            // ======================================
+
+            Trainer.start();
+
+
+            // ======================================
+            // ENABLE BUTTON AGAIN
+            // ======================================
+
+            if (createButton) {
+
+                createButton.disabled = false;
+
+                if (
+                    createButton.dataset.originalText
+                ) {
+
+                    createButton.textContent =
+                        createButton.dataset.originalText;
+
+                }
+
+            }
+
+
+            return;
+
+        }
+
+
+        // ==========================================
         // GENERATE LESSON
         // ==========================================
+
+        this.showLoading();
+
 
         try {
 
@@ -327,6 +433,35 @@ const App = {
                 );
 
             }
+
+
+            // ======================================
+            // SAVE LAST GENERATED LESSON
+            // ======================================
+
+            this.lastLesson =
+                lesson.map(
+                    sentence => ({
+                        russian:
+                            sentence.russian,
+
+                        english:
+                            sentence.english
+                    })
+                );
+
+
+            this.lastTopic =
+                topic;
+
+
+            this.lastCount =
+                sentenceCount;
+
+
+            console.log(
+                "Lesson saved for repetition."
+            );
 
 
             // ======================================
