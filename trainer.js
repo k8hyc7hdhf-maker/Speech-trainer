@@ -1,5 +1,5 @@
 const Trainer = {
-
+ 
     playing: false,
     paused: false,
 
@@ -27,17 +27,6 @@ const Trainer = {
 
         this.playing = true;
         this.paused = false;
-
-        // ==========================================
-        // MEDIA SESSION
-        // ==========================================
-
-        if ("mediaSession" in navigator) {
-
-            navigator.mediaSession.playbackState =
-                "playing";
-
-        }
 
         Lesson.restart();
 
@@ -167,17 +156,6 @@ const Trainer = {
         this.playing = false;
         this.paused = false;
 
-        // ==========================================
-        // MEDIA SESSION
-        // ==========================================
-
-        if ("mediaSession" in navigator) {
-
-            navigator.mediaSession.playbackState =
-                "none";
-
-        }
-
         Speech.stop();
 
         this.clearScreen();
@@ -208,30 +186,6 @@ const Trainer = {
         this.paused = !this.paused;
 
         this.updatePauseButton();
-
-        // ==========================================
-        // MEDIA SESSION
-        // ==========================================
-
-        if ("mediaSession" in navigator) {
-
-            navigator.mediaSession.playbackState =
-                this.paused
-                    ? "paused"
-                    : "playing";
-
-        }
-
-
-        // ==========================================
-        // STOP CURRENT SPEECH WHEN PAUSED
-        // ==========================================
-
-        if (this.paused) {
-
-            Speech.stop();
-
-        }
 
     },
 
@@ -351,17 +305,6 @@ const Trainer = {
 
         this.playing = true;
         this.paused = false;
-
-        // ==========================================
-        // MEDIA SESSION
-        // ==========================================
-
-        if ("mediaSession" in navigator) {
-
-            navigator.mediaSession.playbackState =
-                "playing";
-
-        }
 
         this.updatePauseButton();
 
@@ -565,80 +508,6 @@ const Trainer = {
     }
 
 };
-
-
-// ==========================================
-// MEDIA SESSION -- STEERING WHEEL CONTROLS
-// ==========================================
-
-if ("mediaSession" in navigator) {
-
-    try {
-
-        navigator.mediaSession.setActionHandler(
-            "pause",
-            () => {
-
-                console.log(
-                    "Media Session: PAUSE"
-                );
-
-                if (!Trainer.playing) {
-                    return;
-                }
-
-                Trainer.paused = true;
-
-                Trainer.updatePauseButton();
-
-                navigator.mediaSession.playbackState =
-                    "paused";
-
-                Speech.stop();
-
-            }
-        );
-
-
-        navigator.mediaSession.setActionHandler(
-            "play",
-            () => {
-
-                console.log(
-                    "Media Session: PLAY"
-                );
-
-                if (!Trainer.playing) {
-                    return;
-                }
-
-                Trainer.paused = false;
-
-                Trainer.updatePauseButton();
-
-                navigator.mediaSession.playbackState =
-                    "playing";
-
-            }
-        );
-
-
-        console.log(
-            "Media Session controls registered"
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Media Session error:",
-            error
-        );
-
-    }
-
-}
 
 
 // ==========================================
