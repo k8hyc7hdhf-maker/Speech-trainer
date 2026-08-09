@@ -38,6 +38,8 @@ const Speech = {
 
         this.createVoiceSelectors();
 
+        this.runDiagnostics();
+
 
         console.log(
             "Russian voice:",
@@ -52,6 +54,373 @@ const Speech = {
                 ? this.englishVoice.name
                 : "not found"
         );
+
+    },
+
+
+    // ==========================================
+    // VOICE DIAGNOSTICS
+    //
+    // Temporary diagnostic tool.
+    // We use it to find Milena Enhanced.
+    // ==========================================
+
+    runDiagnostics() {
+
+        console.log(
+            "================================"
+        );
+
+        console.log(
+            "VOICE DIAGNOSTICS"
+        );
+
+        console.log(
+            "================================"
+        );
+
+
+        const milenaVoices =
+            this.voices.filter(
+                voice =>
+                    voice.name
+                        .toLowerCase()
+                        .includes("milena")
+            );
+
+
+        const enhancedVoices =
+            this.voices.filter(
+                voice =>
+                    voice.name
+                        .toLowerCase()
+                        .includes("enhanced")
+            );
+
+
+        const russianVoices =
+            this.getRussianVoices();
+
+
+        console.log(
+            "Milena voices:",
+            milenaVoices
+        );
+
+
+        console.log(
+            "Enhanced voices:",
+            enhancedVoices
+        );
+
+
+        console.log(
+            "Russian voices:",
+            russianVoices
+        );
+
+
+        // --------------------------------------
+        // Print every voice
+        // --------------------------------------
+
+        this.voices.forEach(
+            (voice, index) => {
+
+                console.log(
+                    `[${index}]`,
+                    {
+                        name:
+                            voice.name,
+
+                        lang:
+                            voice.lang,
+
+                        voiceURI:
+                            voice.voiceURI,
+
+                        localService:
+                            voice.localService
+                    }
+                );
+
+            }
+        );
+
+
+        // --------------------------------------
+        // Visible diagnostic panel
+        // --------------------------------------
+
+        this.createDiagnosticPanel();
+
+    },
+
+
+    // ==========================================
+    // CREATE DIAGNOSTIC PANEL
+    // ==========================================
+
+    createDiagnosticPanel() {
+
+        const setupScreen =
+            document.getElementById(
+                "setupScreen"
+            );
+
+
+        if (!setupScreen) {
+
+            return;
+
+        }
+
+
+        let panel =
+            document.getElementById(
+                "voiceDiagnostics"
+            );
+
+
+        if (!panel) {
+
+            panel =
+                document.createElement("div");
+
+            panel.id =
+                "voiceDiagnostics";
+
+
+            const createButton =
+                document.getElementById(
+                    "createBtn"
+                );
+
+
+            if (createButton) {
+
+                setupScreen.insertBefore(
+                    panel,
+                    createButton
+                );
+
+            }
+
+            else {
+
+                setupScreen.appendChild(
+                    panel
+                );
+
+            }
+
+
+            const style =
+                document.createElement(
+                    "style"
+                );
+
+
+            style.id =
+                "voiceDiagnosticsStyle";
+
+
+            style.textContent = `
+
+                #voiceDiagnostics {
+
+                    margin-top: 20px;
+
+                    margin-bottom: 15px;
+
+                    padding: 18px;
+
+                    border-radius: 18px;
+
+                    background: #151515;
+
+                    color: white;
+
+                    font-size: 14px;
+
+                    line-height: 1.5;
+
+                    text-align: left;
+
+                }
+
+
+                #voiceDiagnosticsTitle {
+
+                    font-size: 20px;
+
+                    font-weight: bold;
+
+                    margin-bottom: 12px;
+
+                }
+
+
+                .voiceDiagnosticFound {
+
+                    color: #4cd964;
+
+                    font-weight: bold;
+
+                }
+
+
+                .voiceDiagnosticNotFound {
+
+                    color: #ff453a;
+
+                    font-weight: bold;
+
+                }
+
+
+                .voiceDiagnosticSection {
+
+                    margin-top: 12px;
+
+                    font-weight: bold;
+
+                }
+
+
+                .voiceDiagnosticVoice {
+
+                    padding: 4px 0;
+
+                    color: #cccccc;
+
+                    word-break: break-word;
+
+                }
+
+            `;
+
+
+            document.head.appendChild(
+                style
+            );
+
+        }
+
+
+        const milena =
+            this.voices.filter(
+                voice =>
+                    voice.name
+                        .toLowerCase()
+                        .includes("milena")
+            );
+
+
+        const milenaEnhanced =
+            this.voices.filter(
+                voice => {
+
+                    const name =
+                        voice.name
+                            .toLowerCase();
+
+                    return (
+                        name.includes("milena") &&
+                        name.includes("enhanced")
+                    );
+
+                }
+            );
+
+
+        const russianVoices =
+            this.getRussianVoices();
+
+
+        const statusMilena =
+            milena.length > 0;
+
+
+        const statusEnhanced =
+            milenaEnhanced.length > 0;
+
+
+        panel.innerHTML = `
+
+            <div id="voiceDiagnosticsTitle">
+                Voice Diagnostics
+            </div>
+
+
+            <div>
+                Milena:
+                <span class="${
+                    statusMilena
+                        ? "voiceDiagnosticFound"
+                        : "voiceDiagnosticNotFound"
+                }">
+
+                    ${
+                        statusMilena
+                            ? "FOUND"
+                            : "NOT FOUND"
+                    }
+
+                </span>
+            </div>
+
+
+            <div>
+                Milena (Enhanced):
+                <span class="${
+                    statusEnhanced
+                        ? "voiceDiagnosticFound"
+                        : "voiceDiagnosticNotFound"
+                }">
+
+                    ${
+                        statusEnhanced
+                            ? "FOUND"
+                            : "NOT FOUND"
+                    }
+
+                </span>
+            </div>
+
+
+            <div class="voiceDiagnosticSection">
+                Russian voices:
+            </div>
+
+
+            ${
+                russianVoices.length
+                    ? russianVoices
+                        .map(
+                            voice => `
+                                <div class="voiceDiagnosticVoice">
+                                    ${voice.name}
+                                    --
+                                    ${voice.lang}
+                                </div>
+                            `
+                        )
+                        .join("")
+                    : `
+                        <div class="voiceDiagnosticVoice">
+                            No Russian voices found.
+                        </div>
+                    `
+            }
+
+
+            <div class="voiceDiagnosticSection">
+                All voices detected:
+                ${this.voices.length}
+            </div>
+
+        `;
 
     },
 
@@ -152,10 +521,6 @@ const Speech = {
         language
     ) {
 
-        // --------------------------------------
-        // First: preferred names
-        // --------------------------------------
-
         for (
             const name of preferredNames
         ) {
@@ -178,10 +543,6 @@ const Speech = {
 
         }
 
-
-        // --------------------------------------
-        // Second: language
-        // --------------------------------------
 
         return this.voices.find(
             v =>
@@ -284,10 +645,6 @@ const Speech = {
             );
 
 
-        // --------------------------------------
-        // Create container once
-        // --------------------------------------
-
         if (!container) {
 
             container =
@@ -296,11 +653,13 @@ const Speech = {
             container.id =
                 "voiceSettings";
 
+
             container.innerHTML = `
 
                 <div class="voiceSettingsTitle">
                     Voice settings
                 </div>
+
 
                 <label
                     for="russianVoiceSelect"
@@ -308,9 +667,11 @@ const Speech = {
                     Russian voice
                 </label>
 
+
                 <select
                     id="russianVoiceSelect"
                 ></select>
+
 
                 <label
                     for="englishVoiceSelect"
@@ -318,15 +679,13 @@ const Speech = {
                     English voice
                 </label>
 
+
                 <select
                     id="englishVoiceSelect"
                 ></select>
 
             `;
 
-
-            // Put voice settings
-            // before Create Training button
 
             const createButton =
                 document.getElementById(
@@ -352,23 +711,22 @@ const Speech = {
             }
 
 
-            // ----------------------------------
-            // Basic styles
-            // ----------------------------------
-
             const style =
                 document.createElement(
                     "style"
                 );
 
+
             style.id =
                 "speechVoiceSettingsStyle";
+
 
             style.textContent = `
 
                 #voiceSettings {
 
                     margin-top: 25px;
+
                     margin-bottom: 10px;
 
                     padding: 20px;
@@ -424,14 +782,11 @@ const Speech = {
 
             `;
 
+
             document.head.appendChild(
                 style
             );
 
-
-            // ----------------------------------
-            // Change events
-            // ----------------------------------
 
             document
                 .getElementById(
@@ -499,10 +854,6 @@ const Speech = {
         }
 
 
-        // --------------------------------------
-        // Russian voices
-        // --------------------------------------
-
         russianSelect.innerHTML = "";
 
 
@@ -526,7 +877,6 @@ const Speech = {
                     " -- " +
                     voice.lang;
 
-
                 russianSelect.appendChild(
                     option
                 );
@@ -534,10 +884,6 @@ const Speech = {
             }
         );
 
-
-        // --------------------------------------
-        // English voices
-        // --------------------------------------
 
         englishSelect.innerHTML = "";
 
@@ -562,7 +908,6 @@ const Speech = {
                     " -- " +
                     voice.lang;
 
-
                 englishSelect.appendChild(
                     option
                 );
@@ -570,10 +915,6 @@ const Speech = {
             }
         );
 
-
-        // --------------------------------------
-        // Select current voices
-        // --------------------------------------
 
         if (this.russianVoice) {
 
@@ -677,8 +1018,6 @@ const Speech = {
 
     // ==========================================
     // UNLOCK
-    //
-    // Called directly from Create Training
     // ==========================================
 
     unlock() {
@@ -805,10 +1144,6 @@ const Speech = {
                 };
 
 
-                // --------------------------------
-                // Invalid text
-                // --------------------------------
-
                 if (
                     typeof text !==
                         "string" ||
@@ -830,10 +1165,6 @@ const Speech = {
                 );
 
 
-                // --------------------------------
-                // Cancel previous speech
-                // --------------------------------
-
                 try {
 
                     speechSynthesis.cancel();
@@ -849,10 +1180,6 @@ const Speech = {
 
                 }
 
-
-                // --------------------------------
-                // Create utterance
-                // --------------------------------
 
                 const utterance =
                     new SpeechSynthesisUtterance(
@@ -872,10 +1199,6 @@ const Speech = {
                     1;
 
 
-                // --------------------------------
-                // Set voice
-                // --------------------------------
-
                 if (voice) {
 
                     utterance.voice =
@@ -883,10 +1206,6 @@ const Speech = {
 
                 }
 
-
-                // --------------------------------
-                // Events
-                // --------------------------------
 
                 utterance.onstart =
                     () => {
@@ -924,10 +1243,6 @@ const Speech = {
                     };
 
 
-                // --------------------------------
-                // Safety timeout
-                // --------------------------------
-
                 timeout =
                     setTimeout(
                         () => {
@@ -956,10 +1271,6 @@ const Speech = {
                         )
                     );
 
-
-                // --------------------------------
-                // Speak
-                // --------------------------------
 
                 try {
 
@@ -1041,3 +1352,26 @@ speechSynthesis.onvoiceschanged =
 // ==========================================
 
 Speech.init();
+
+
+// ==========================================
+// iOS VOICE LOADING RETRIES
+//
+// iPhone/Safari sometimes provides voices
+// asynchronously.
+// ==========================================
+
+setTimeout(
+    () => Speech.init(),
+    500
+);
+
+setTimeout(
+    () => Speech.init(),
+    1500
+);
+
+setTimeout(
+    () => Speech.init(),
+    3000
+);
