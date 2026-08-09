@@ -11,188 +11,37 @@ const Trainer = {
     englishText: document.getElementById("enText"),
 
 
-    // ==========================================
-    // MEDIA SESSION
-    // Управление Play/Pause с кнопок автомобиля
-    // ==========================================
-
-    setupMediaControls() {
-
-        if (!("mediaSession" in navigator)) {
-
-            console.log(
-                "Media Session API is not supported."
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            // ----------------------------------
-            // PAUSE
-            // ----------------------------------
-
-            navigator.mediaSession.setActionHandler(
-                "pause",
-                () => {
-
-                    console.log(
-                        "🚗 Media button: PAUSE"
-                    );
-
-
-                    if (
-                        this.playing &&
-                        !this.paused
-                    ) {
-
-                        this.togglePause();
-
-                    }
-
-                }
-            );
-
-
-            // ----------------------------------
-            // PLAY
-            // ----------------------------------
-
-            navigator.mediaSession.setActionHandler(
-                "play",
-                () => {
-
-                    console.log(
-                        "🚗 Media button: PLAY"
-                    );
-
-
-                    if (
-                        this.playing &&
-                        this.paused
-                    ) {
-
-                        this.togglePause();
-
-                    }
-
-                }
-            );
-
-
-            console.log(
-                "🚗 Media controls connected."
-            );
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Media Session setup error:",
-                error
-            );
-
-        }
-
-    },
-
-
-    // ==========================================
-    // UPDATE MEDIA STATE
-    // ==========================================
-
-    updateMediaState() {
-
-        if (!("mediaSession" in navigator)) {
-            return;
-        }
-
-
-        try {
-
-            if (
-                this.playing &&
-                !this.paused
-            ) {
-
-                navigator.mediaSession.playbackState =
-                    "playing";
-
-            }
-
-            else if (
-                this.playing &&
-                this.paused
-            ) {
-
-                navigator.mediaSession.playbackState =
-                    "paused";
-
-            }
-
-            else {
-
-                navigator.mediaSession.playbackState =
-                    "none";
-
-            }
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Media state error:",
-                error
-            );
-
-        }
-
-    },
-
-
-    // ==========================================
-    // START
-    // ==========================================
-
     async start() {
 
         // Новый запуск воспроизведения
         const id = ++this.playbackId;
 
-
         if (this.playing) {
-
             this.stop();
-
             return;
-
         }
-
 
         if (Lesson.count() === 0) {
-
             return;
-
         }
-
-
-        // Подключаем управление с руля
-        this.setupMediaControls();
-
 
         this.playing = true;
         this.paused = false;
 
+        // ==========================================
+        // MEDIA SESSION
+        // ==========================================
+
+        if ("mediaSession" in navigator) {
+
+            navigator.mediaSession.playbackState =
+                "playing";
+
+        }
+
         Lesson.restart();
 
         this.updatePauseButton();
-
-        this.updateMediaState();
 
 
         while (
@@ -202,14 +51,11 @@ const Trainer = {
 
             await this.waitWhilePaused();
 
-
             if (
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -232,9 +78,7 @@ const Trainer = {
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -247,9 +91,7 @@ const Trainer = {
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -260,9 +102,7 @@ const Trainer = {
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -281,9 +121,7 @@ const Trainer = {
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -296,9 +134,7 @@ const Trainer = {
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -317,9 +153,6 @@ const Trainer = {
 
         }
 
-
-        this.updateMediaState();
-
     },
 
 
@@ -333,6 +166,17 @@ const Trainer = {
 
         this.playing = false;
         this.paused = false;
+
+        // ==========================================
+        // MEDIA SESSION
+        // ==========================================
+
+        if ("mediaSession" in navigator) {
+
+            navigator.mediaSession.playbackState =
+                "none";
+
+        }
 
         Speech.stop();
 
@@ -352,8 +196,6 @@ const Trainer = {
 
         this.updatePauseButton();
 
-        this.updateMediaState();
-
     },
 
 
@@ -363,25 +205,33 @@ const Trainer = {
 
     togglePause() {
 
-        if (!this.playing) {
-
-            return;
-
-        }
-
-
         this.paused = !this.paused;
 
         this.updatePauseButton();
 
-        this.updateMediaState();
+        // ==========================================
+        // MEDIA SESSION
+        // ==========================================
+
+        if ("mediaSession" in navigator) {
+
+            navigator.mediaSession.playbackState =
+                this.paused
+                    ? "paused"
+                    : "playing";
+
+        }
 
 
-        console.log(
-            this.paused
-                ? "⏸ Trainer paused"
-                : "▶ Trainer resumed"
-        );
+        // ==========================================
+        // STOP CURRENT SPEECH WHEN PAUSED
+        // ==========================================
+
+        if (this.paused) {
+
+            Speech.stop();
+
+        }
 
     },
 
@@ -389,13 +239,9 @@ const Trainer = {
     updatePauseButton() {
 
         const button =
-            document.getElementById(
-                "pauseBtn"
-            );
-
+            document.getElementById("pauseBtn");
 
         if (!button) return;
-
 
         button.textContent =
             this.paused
@@ -412,9 +258,7 @@ const Trainer = {
     async previous() {
 
         if (Lesson.count() === 0) {
-
             return;
-
         }
 
 
@@ -422,16 +266,12 @@ const Trainer = {
         // чтобы он не мешал Previous.
         this.playbackId++;
 
-        const id =
-            this.playbackId;
-
+        const id = this.playbackId;
 
         this.playing = false;
         this.paused = false;
 
         Speech.stop();
-
-        this.updateMediaState();
 
 
         // Переходим к предыдущему предложению
@@ -440,9 +280,7 @@ const Trainer = {
 
 
         if (!sentence) {
-
             return;
-
         }
 
 
@@ -458,9 +296,7 @@ const Trainer = {
 
 
         if (id !== this.playbackId) {
-
             return;
-
         }
 
 
@@ -470,9 +306,7 @@ const Trainer = {
 
 
         if (id !== this.playbackId) {
-
             return;
-
         }
 
 
@@ -488,9 +322,7 @@ const Trainer = {
 
 
         if (id !== this.playbackId) {
-
             return;
-
         }
 
 
@@ -504,9 +336,7 @@ const Trainer = {
 
 
         if (id !== this.playbackId) {
-
             return;
-
         }
 
 
@@ -522,9 +352,18 @@ const Trainer = {
         this.playing = true;
         this.paused = false;
 
-        this.updatePauseButton();
+        // ==========================================
+        // MEDIA SESSION
+        // ==========================================
 
-        this.updateMediaState();
+        if ("mediaSession" in navigator) {
+
+            navigator.mediaSession.playbackState =
+                "playing";
+
+        }
+
+        this.updatePauseButton();
 
 
         // Продолжаем с текущего предложения
@@ -546,14 +385,11 @@ const Trainer = {
 
             await this.waitWhilePaused();
 
-
             if (
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -576,9 +412,7 @@ const Trainer = {
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -591,9 +425,7 @@ const Trainer = {
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -604,9 +436,7 @@ const Trainer = {
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -625,9 +455,7 @@ const Trainer = {
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -640,9 +468,7 @@ const Trainer = {
                 !this.playing ||
                 id !== this.playbackId
             ) {
-
                 break;
-
             }
 
 
@@ -739,6 +565,80 @@ const Trainer = {
     }
 
 };
+
+
+// ==========================================
+// MEDIA SESSION -- STEERING WHEEL CONTROLS
+// ==========================================
+
+if ("mediaSession" in navigator) {
+
+    try {
+
+        navigator.mediaSession.setActionHandler(
+            "pause",
+            () => {
+
+                console.log(
+                    "Media Session: PAUSE"
+                );
+
+                if (!Trainer.playing) {
+                    return;
+                }
+
+                Trainer.paused = true;
+
+                Trainer.updatePauseButton();
+
+                navigator.mediaSession.playbackState =
+                    "paused";
+
+                Speech.stop();
+
+            }
+        );
+
+
+        navigator.mediaSession.setActionHandler(
+            "play",
+            () => {
+
+                console.log(
+                    "Media Session: PLAY"
+                );
+
+                if (!Trainer.playing) {
+                    return;
+                }
+
+                Trainer.paused = false;
+
+                Trainer.updatePauseButton();
+
+                navigator.mediaSession.playbackState =
+                    "playing";
+
+            }
+        );
+
+
+        console.log(
+            "Media Session controls registered"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Media Session error:",
+            error
+        );
+
+    }
+
+}
 
 
 // ==========================================
