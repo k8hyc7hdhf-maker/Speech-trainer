@@ -1,6 +1,5 @@
 const Lesson = {
 
-
     sentences: [],
     order: [],
     index: 0,

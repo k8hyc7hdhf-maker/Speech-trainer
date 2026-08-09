@@ -1,5 +1,5 @@
 const Trainer = {
-
+ 
     playing: false,
     paused: false,
 

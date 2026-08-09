@@ -1,5 +1,5 @@
 const Settings = {
-
+ 
     // Пауза после окончания русской озвучки
     russianPause: 5000,
 
