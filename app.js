@@ -255,16 +255,27 @@ const App = {
 
 
         // ==========================================
-        // TOPIC
-        // ==========================================
+        // // ==========================================
+// TOPIC
+// ==========================================
 
-        const topic =
-            document
-                .getElementById("topicInput")
-                .value
-                .trim();
+let topic =
+    document
+        .getElementById("topicInput")
+        .value
+        .trim();
 
 
+if (!topic) {
+
+    topic = `
+used to
+be used to
+get used to
+put off
+    `.trim();
+
+}
         // ==========================================
         // SENTENCE COUNT
         // ==========================================
